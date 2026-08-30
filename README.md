@@ -22,7 +22,7 @@ python3 simple_rag.py
 ---
 
 
-## Ready-made dataset (already generated for you)
+## Ready-made dataset ( Generated )
 
 The `dataset/` folder contains 5 realistic company files, already built and
 ready to use — no need to generate your own to hit the deadline:
