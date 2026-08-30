@@ -15,10 +15,10 @@ pip install scikit-learn
 python3 simple_rag.py
 ```
 . You'll see 4 demo queries run automatically, showing:
-- A normal employee query being answered ✅
-- An employee being **blocked by RBAC** from a salary-related doc ❌
-- An HR user successfully retrieving that same salary doc ✅
-- A prompt-injection style query being **blocked by the guardrail** 🚫
+- A normal employee query being answered
+- An employee being **blocked by RBAC** from a salary-related doc
+- An HR user successfully retrieving that same salary doc
+- A prompt-injection style query being **blocked by the guardrail**
 ---
 
 
