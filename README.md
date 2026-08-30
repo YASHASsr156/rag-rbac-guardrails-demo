@@ -22,7 +22,7 @@ python3 simple_rag.py
 ---
 
 
-## 3. Ready-made dataset (already generated for you)
+## Ready-made dataset (already generated for you)
 
 The `dataset/` folder contains 5 realistic company files, already built and
 ready to use — no need to generate your own to hit the deadline:
@@ -55,42 +55,24 @@ change content, or add more documents/roles).
 
 ---
 
-## 4. Using your OWN PDFs / spreadsheets instead of the sample text
+## The Problem
+Imagine a company has a bunch of internal files — an employee handbook, an IT policy, salary sheets, budget spreadsheets, HR disciplinary records. Different people should see different things:
+•	Everyone can read the handbook
+•	Only HR should see salary numbers
+•	Only managers should see budget numbers
+•	Only HR should see disciplinary records
+Now imagine you want an AI chatbot that can answer questions about all of this — like "how many leave days do I get?" or "what's the manager salary band?" The problem: if you just feed all the documents to an AI, anyone who asks gets an answer, even if they shouldn't have access to that info. A regular employee could ask about salaries and the AI would happily tell them.
 
-Replace the hardcoded `DOCUMENTS` list in `simple_rag.py` with content
-extracted from real files:
-
-```bash
-pip install pypdf openpyxl pandas
-```
-
-```python
-from pypdf import PdfReader
-import pandas as pd
-
-# PDF -> text
-reader = PdfReader("your_file.pdf")
-pdf_text = "\n".join(page.extract_text() for page in reader.pages)
-
-# XLSX -> text
-df = pd.read_excel("your_file.xlsx")
-xlsx_text = df.to_string()
-
-DOCUMENTS = [
-    Document(doc_id="d1", source="your_file.pdf", text=pdf_text,
-             allowed_roles=["employee", "manager", "hr", "admin"]),
-    Document(doc_id="d2", source="your_file.xlsx", text=xlsx_text,
-             allowed_roles=["hr", "admin"]),
-]
-```
-
-For longer documents, split `pdf_text` into smaller chunks (e.g. every
-500 words) and create one `Document` per chunk — this improves retrieval
-quality since TF-IDF/embeddings work better on focused passages.
+## What this project does
+It's a smart Q&A system that:
+1.	Reads real documents (PDFs and spreadsheets) — like the AI's "library"
+2.	Finds the relevant piece of a document when someone asks a question, instead of guessing or making things up
+3.	Checks who's asking first — before it even looks for an answer, it checks: "does this person's role allow them to see this document?" If not, that document is completely excluded from consideration — the AI won't even peek at it
+4.	Refuses to answer if it shouldn't — if there's no permitted document that answers the question, it says "I don't have access to that" instead of guessing.
 
 ---
 
-## 5. Working
+## Working
 
 **Architecture:**
 `User Query → Guardrail Input Check → RBAC-Filtered Retrieval (TF-IDF/embeddings) → Context Assembly → LLM Generation (constrained to context) → Answer`
