@@ -1,71 +1,26 @@
-# RAG System with RBAC + Guardrails — Run Instructions
+# RAG System with RBAC + Guardrails
 
-You have **two versions**. Use the **Simple version** unless you have 15+ spare
-minutes and a stable internet connection.
-
-| | Simple (`simple_rag.py`) | Advanced (`advanced_rag.py`) |
-|---|---|---|
-| Setup time | 0 min (uses only scikit-learn) | 5–10 min (installs + model download) |
-| Retrieval method | TF-IDF + cosine similarity | Real sentence embeddings + FAISS |
-| Works fully offline | Yes | No (needs internet once, to download the embedding model) |
-| Good enough for a demo/submission | Yes | Yes (slightly more "textbook RAG") |
-
----
-
-## 1. Simple version — recommended, fastest
-
-### Step 1 — Check Python is installed
+## Step 1 — Check Python is installed
 ```bash
 python3 --version
 ```
 Any Python 3.8+ works.
 
-### Step 2 — Install the one dependency (usually already present)
+## Step 2 — Install the one dependency 
 ```bash
 pip install scikit-learn
 ```
-
-### Step 3 — Run it
+## Step 3 — Run it
 ```bash
 python3 simple_rag.py
 ```
-
-That's it. You'll see 4 demo queries run automatically, showing:
+. You'll see 4 demo queries run automatically, showing:
 - A normal employee query being answered ✅
 - An employee being **blocked by RBAC** from a salary-related doc ❌
 - An HR user successfully retrieving that same salary doc ✅
 - A prompt-injection style query being **blocked by the guardrail** 🚫
-
-### Step 4 (optional) — Get real LLM-generated answers instead of extractive ones
-If you have an Anthropic API key:
-```bash
-export ANTHROPIC_API_KEY="your-key-here"
-python3 simple_rag.py
-```
-Without a key, the script still works — it just returns the retrieved
-context directly as the "answer" (clearly labeled as extractive), which is
-completely fine for demonstrating the RAG + RBAC + guardrail pipeline.
-
 ---
 
-## 2. Advanced version — only if you have extra time
-
-### Step 1 — Install dependencies
-```bash
-pip install sentence-transformers faiss-cpu
-```
-(This downloads a small ~80MB embedding model the first time you run it —
-needs internet, takes 1-3 minutes depending on connection.)
-
-### Step 2 — Run it
-```bash
-python3 advanced_rag.py
-```
-It reuses the same documents, RBAC rules, and guardrails from
-`simple_rag.py`, but retrieves using real semantic embeddings instead of
-TF-IDF.
-
----
 
 ## 3. Ready-made dataset (already generated for you)
 
@@ -135,7 +90,7 @@ quality since TF-IDF/embeddings work better on focused passages.
 
 ---
 
-## 5. What to say in your submission write-up
+## 5. Working
 
 **Architecture:**
 `User Query → Guardrail Input Check → RBAC-Filtered Retrieval (TF-IDF/embeddings) → Context Assembly → LLM Generation (constrained to context) → Answer`
